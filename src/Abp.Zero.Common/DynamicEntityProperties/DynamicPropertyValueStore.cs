@@ -32,13 +32,13 @@ namespace Abp.DynamicEntityProperties
 
         public virtual List<DynamicPropertyValue> GetAllValuesOfDynamicProperty(int dynamicPropertyId)
         {
-            return _dynamicPropertyValuesRepository.GetAll()
+            return _dynamicPropertyValuesRepository.GetAllReadonly()
                 .Where(propertyValue => propertyValue.DynamicPropertyId == dynamicPropertyId).ToList();
         }
 
         public virtual async Task<List<DynamicPropertyValue>> GetAllValuesOfDynamicPropertyAsync(int dynamicPropertyId)
         {
-            return await _asyncQueryableExecuter.ToListAsync((await _dynamicPropertyValuesRepository.GetAllAsync())
+            return await _asyncQueryableExecuter.ToListAsync((await _dynamicPropertyValuesRepository.GetAllReadonlyAsync())
                 .Where(propertyValue => propertyValue.DynamicPropertyId == dynamicPropertyId));
         }
 

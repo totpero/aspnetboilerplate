@@ -59,7 +59,7 @@ namespace Abp.BackgroundJobs
         {
             return await _unitOfWorkManager.WithUnitOfWork(async() =>
             {
-                var waitingJobsQuery = (await _backgroundJobRepository.GetAllAsync())
+                var waitingJobsQuery = (await _backgroundJobRepository.GetAllReadonlyAsync())
                     .Where(t => !t.IsAbandoned && t.NextTryTime <= Clock.Now)
                     .OrderByDescending(t => t.Priority)
                     .ThenBy(t => t.TryCount)
@@ -74,7 +74,7 @@ namespace Abp.BackgroundJobs
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {
-                return _backgroundJobRepository.GetAll()
+                return _backgroundJobRepository.GetAllReadonly()
                     .Where(t => !t.IsAbandoned && t.NextTryTime <= Clock.Now)
                     .OrderByDescending(t => t.Priority)
                     .ThenBy(t => t.TryCount)

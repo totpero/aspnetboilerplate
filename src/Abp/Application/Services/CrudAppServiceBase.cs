@@ -97,7 +97,7 @@ namespace Abp.Application.Services
         /// <param name="input">The input.</param>
         protected virtual IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
         {
-            return Repository.GetAll();
+            return Repository.GetAllReadonly();
         }
 
         /// <summary>

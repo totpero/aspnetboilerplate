@@ -179,7 +179,7 @@ namespace Abp.Webhooks
             {
                 using (_unitOfWorkManager.Current.SetTenantId(tenantId))
                 {
-                    sendAttemptCount = _webhookSendAttemptRepository.GetAll()
+                    sendAttemptCount = _webhookSendAttemptRepository.GetAllReadonly()
                         .Count(attempt =>
                             attempt.WebhookEventId == webhookId &&
                             attempt.WebhookSubscriptionId == webhookSubscriptionId);
@@ -207,7 +207,7 @@ namespace Abp.Webhooks
                     else
                     {
                         result = !await AsyncQueryableExecuter.AnyAsync(
-                            (await _webhookSendAttemptRepository.GetAllAsync())
+                            (await _webhookSendAttemptRepository.GetAllReadonlyAsync())
                                 .OrderByDescending(attempt => attempt.CreationTime)
                                 .Take(failCount)
                                 .Where(attempt => attempt.ResponseStatusCode == HttpStatusCode.OK)
@@ -233,7 +233,7 @@ namespace Abp.Webhooks
             {
                 using (_unitOfWorkManager.Current.SetTenantId(tenantId))
                 {
-                    var query = _webhookSendAttemptRepository.GetAllIncluding(attempt => attempt.WebhookEvent)
+                    var query = _webhookSendAttemptRepository.GetAllReadonlyIncluding(attempt => attempt.WebhookEvent)
                         .Where(attempt =>
                             attempt.WebhookSubscriptionId == subscriptionId
                         );
@@ -268,7 +268,7 @@ namespace Abp.Webhooks
             {
                 using (_unitOfWorkManager.Current.SetTenantId(tenantId))
                 {
-                    var query = _webhookSendAttemptRepository.GetAllIncluding(attempt => attempt.WebhookEvent)
+                    var query = _webhookSendAttemptRepository.GetAllReadonlyIncluding(attempt => attempt.WebhookEvent)
                         .Where(attempt =>
                             attempt.WebhookSubscriptionId == subscriptionId
                         );
@@ -304,7 +304,7 @@ namespace Abp.Webhooks
                 using (_unitOfWorkManager.Current.SetTenantId(tenantId))
                 {
                     sendAttempts = await AsyncQueryableExecuter.ToListAsync(
-                        (await _webhookSendAttemptRepository.GetAllAsync())
+                        (await _webhookSendAttemptRepository.GetAllReadonlyAsync())
                             .Where(attempt => attempt.WebhookEventId == webhookEventId)
                             .OrderByDescending(attempt => attempt.CreationTime)
                     );
@@ -324,7 +324,7 @@ namespace Abp.Webhooks
             {
                 using (_unitOfWorkManager.Current.SetTenantId(tenantId))
                 {
-                    sendAttempts = _webhookSendAttemptRepository.GetAll()
+                    sendAttempts = _webhookSendAttemptRepository.GetAllReadonly()
                         .Where(attempt => attempt.WebhookEventId == webhookEventId)
                         .OrderByDescending(attempt => attempt.CreationTime).ToList();
                 }

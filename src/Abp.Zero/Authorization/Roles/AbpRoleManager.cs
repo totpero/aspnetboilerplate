@@ -482,7 +482,7 @@ namespace Abp.Authorization.Roles
             {
                 if (!includeChildren)
                 {
-                    var query = from uor in await _organizationUnitRoleRepository.GetAllAsync()
+                    var query = from uor in await _organizationUnitRoleRepository.GetAllReadonlyAsync()
                         join role in Roles on uor.RoleId equals role.Id
                         where uor.OrganizationUnitId == organizationUnit.Id
                         select role;
@@ -491,9 +491,9 @@ namespace Abp.Authorization.Roles
                 }
                 else
                 {
-                    var query = from uor in await _organizationUnitRoleRepository.GetAllAsync()
+                    var query = from uor in await _organizationUnitRoleRepository.GetAllReadonlyAsync()
                         join role in Roles on uor.RoleId equals role.Id
-                        join ou in await _organizationUnitRepository.GetAllAsync() on uor.OrganizationUnitId equals ou.Id
+                        join ou in await _organizationUnitRepository.GetAllReadonlyAsync() on uor.OrganizationUnitId equals ou.Id
                         where ou.Code.StartsWith(organizationUnit.Code)
                         select role;
 
@@ -612,8 +612,8 @@ namespace Abp.Authorization.Roles
         {
             return await UnitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
-                var query = from uor in await _organizationUnitRoleRepository.GetAllAsync()
-                    join ou in await _organizationUnitRepository.GetAllAsync() on uor.OrganizationUnitId equals ou.Id
+                var query = from uor in await _organizationUnitRoleRepository.GetAllReadonlyAsync()
+                    join ou in await _organizationUnitRepository.GetAllReadonlyAsync() on uor.OrganizationUnitId equals ou.Id
                     where uor.RoleId == role.Id
                     select ou;
 

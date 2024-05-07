@@ -15,7 +15,6 @@ using Abp.Extensions;
 using Abp.IdentityFramework;
 using Abp.Localization;
 using Abp.MultiTenancy;
-using Abp.Timing;
 using Abp.Zero.Configuration;
 using Microsoft.AspNet.Identity;
 

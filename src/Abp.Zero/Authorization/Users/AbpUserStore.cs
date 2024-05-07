@@ -290,8 +290,8 @@ namespace Abp.Authorization.Users
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async() =>
             {
-                var query = from userLogin in await _userLoginRepository.GetAllAsync()
-                    join user in await _userRepository.GetAllAsync() on userLogin.UserId equals user.Id
+                var query = from userLogin in await _userLoginRepository.GetAllReadonlyAsync()
+                    join user in await _userRepository.GetAllReadonlyAsync() on userLogin.UserId equals user.Id
                     where userLogin.LoginProvider == login.LoginProvider && userLogin.ProviderKey == login.ProviderKey
                     select user;
 
@@ -305,8 +305,8 @@ namespace Abp.Authorization.Users
             {
                 using (_unitOfWorkManager.Current.SetTenantId(tenantId))
                 {
-                    var query = from userLogin in await _userLoginRepository.GetAllAsync()
-                        join user in await _userRepository.GetAllAsync() on userLogin.UserId equals user.Id
+                    var query = from userLogin in await _userLoginRepository.GetAllReadonlyAsync()
+                        join user in await _userRepository.GetAllReadonlyAsync() on userLogin.UserId equals user.Id
                         where userLogin.LoginProvider == login.LoginProvider &&
                               userLogin.ProviderKey == login.ProviderKey
                         select user;
@@ -351,16 +351,16 @@ namespace Abp.Authorization.Users
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
-                var userRoles = await AsyncQueryableExecuter.ToListAsync(from userRole in await _userRoleRepository.GetAllAsync()
-                    join role in await _roleRepository.GetAllAsync() on userRole.RoleId equals role.Id
+                var userRoles = await AsyncQueryableExecuter.ToListAsync(from userRole in await _userRoleRepository.GetAllReadonlyAsync()
+                    join role in await _roleRepository.GetAllReadonlyAsync() on userRole.RoleId equals role.Id
                     where userRole.UserId == user.Id
                     select role.Name);
 
                 var userOrganizationUnitRoles = await AsyncQueryableExecuter.ToListAsync(
-                    from userOu in await _userOrganizationUnitRepository.GetAllAsync()
-                    join roleOu in await _organizationUnitRoleRepository.GetAllAsync() on userOu.OrganizationUnitId equals roleOu
+                    from userOu in await _userOrganizationUnitRepository.GetAllReadonlyAsync()
+                    join roleOu in await _organizationUnitRoleRepository.GetAllReadonlyAsync() on userOu.OrganizationUnitId equals roleOu
                         .OrganizationUnitId
-                    join userOuRoles in await _roleRepository.GetAllAsync() on roleOu.RoleId equals userOuRoles.Id
+                    join userOuRoles in await _roleRepository.GetAllReadonlyAsync() on roleOu.RoleId equals userOuRoles.Id
                     where userOu.UserId == user.Id
                     select userOuRoles.Name);
 
@@ -375,17 +375,17 @@ namespace Abp.Authorization.Users
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {
                 var userRoles = (
-                    from userRole in _userRoleRepository.GetAll()
-                    join role in _roleRepository.GetAll() on userRole.RoleId equals role.Id
+                    from userRole in _userRoleRepository.GetAllReadonly()
+                    join role in _roleRepository.GetAllReadonly() on userRole.RoleId equals role.Id
                     where userRole.UserId == userId
                     select role.Name
                 ).ToList();
 
                 var userOrganizationUnitRoles = (
-                    from userOu in _userOrganizationUnitRepository.GetAll()
-                    join roleOu in _organizationUnitRoleRepository.GetAll() on userOu.OrganizationUnitId equals roleOu
+                    from userOu in _userOrganizationUnitRepository.GetAllReadonly()
+                    join roleOu in _organizationUnitRoleRepository.GetAllReadonly() on userOu.OrganizationUnitId equals roleOu
                         .OrganizationUnitId
-                    join userOuRoles in _roleRepository.GetAll() on roleOu.RoleId equals userOuRoles.Id
+                    join userOuRoles in _roleRepository.GetAllReadonly() on roleOu.RoleId equals userOuRoles.Id
                     where userOu.UserId == userId
                     select userOuRoles.Name
                 ).ToList();

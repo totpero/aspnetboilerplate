@@ -62,7 +62,7 @@ namespace Abp.DynamicEntityProperties
 
         public virtual List<DynamicEntityPropertyValue> GetValues(int dynamicEntityPropertyId, string entityId)
         {
-            return _dynamicEntityPropertyValueRepository.GetAll().Where(val =>
+            return _dynamicEntityPropertyValueRepository.GetAllReadonly().Where(val =>
                 val.EntityId == entityId && val.DynamicEntityPropertyId == dynamicEntityPropertyId).ToList();
         }
 
@@ -70,14 +70,14 @@ namespace Abp.DynamicEntityProperties
             string entityId)
         {
             return await _asyncQueryableExecuter.ToListAsync(
-                (await _dynamicEntityPropertyValueRepository.GetAllAsync())
+                (await _dynamicEntityPropertyValueRepository.GetAllReadonlyAsync())
                     .Where(val => val.EntityId == entityId && val.DynamicEntityPropertyId == dynamicEntityPropertyId)
             );
         }
 
         public List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId)
         {
-            return _dynamicEntityPropertyValueRepository.GetAll()
+            return _dynamicEntityPropertyValueRepository.GetAllReadonly()
                 .Where(val => val.EntityId == entityId && val.DynamicEntityProperty.EntityFullName == entityFullName)
                 .ToList();
         }
@@ -92,7 +92,7 @@ namespace Abp.DynamicEntityProperties
 
         public List<DynamicEntityPropertyValue> GetValues(string entityFullName, string entityId, int dynamicPropertyId)
         {
-            return _dynamicEntityPropertyValueRepository.GetAll()
+            return _dynamicEntityPropertyValueRepository.GetAllReadonly()
                 .Where(val =>
                     val.EntityId == entityId &&
                     val.DynamicEntityProperty.EntityFullName == entityFullName &&
@@ -105,7 +105,7 @@ namespace Abp.DynamicEntityProperties
             int dynamicPropertyId)
         {
             return await _asyncQueryableExecuter.ToListAsync(
-                (await _dynamicEntityPropertyValueRepository.GetAllAsync())
+                (await _dynamicEntityPropertyValueRepository.GetAllReadonlyAsync())
                     .Where(val =>
                         val.EntityId == entityId &&
                         val.DynamicEntityProperty.EntityFullName == entityFullName &&

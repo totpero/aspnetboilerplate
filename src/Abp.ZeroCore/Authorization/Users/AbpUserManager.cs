@@ -886,8 +886,8 @@ namespace Abp.Authorization.Users
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
-                var query = from uou in await _userOrganizationUnitRepository.GetAllAsync()
-                    join ou in await _organizationUnitRepository.GetAllAsync() on uou.OrganizationUnitId equals ou.Id
+                var query = from uou in await _userOrganizationUnitRepository.GetAllReadonlyAsync()
+                    join ou in await _organizationUnitRepository.GetAllReadonlyAsync() on uou.OrganizationUnitId equals ou.Id
                     where uou.UserId == user.Id
                     select ou;
 
@@ -899,8 +899,8 @@ namespace Abp.Authorization.Users
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {
-                var query = from uou in _userOrganizationUnitRepository.GetAll()
-                    join ou in _organizationUnitRepository.GetAll() on uou.OrganizationUnitId equals ou.Id
+                var query = from uou in _userOrganizationUnitRepository.GetAllReadonly()
+                    join ou in _organizationUnitRepository.GetAllReadonly() on uou.OrganizationUnitId equals ou.Id
                     where uou.UserId == user.Id
                     select ou;
 
@@ -916,7 +916,7 @@ namespace Abp.Authorization.Users
             {
                 if (!includeChildren)
                 {
-                    var query = from uou in await _userOrganizationUnitRepository.GetAllAsync()
+                    var query = from uou in await _userOrganizationUnitRepository.GetAllReadonlyAsync()
                         join user in Users on uou.UserId equals user.Id
                         where uou.OrganizationUnitId == organizationUnit.Id
                         select user;
@@ -925,9 +925,9 @@ namespace Abp.Authorization.Users
                 }
                 else
                 {
-                    var query = from uou in await _userOrganizationUnitRepository.GetAllAsync()
+                    var query = from uou in await _userOrganizationUnitRepository.GetAllReadonlyAsync()
                         join user in Users on uou.UserId equals user.Id
-                        join ou in await _organizationUnitRepository.GetAllAsync() on uou.OrganizationUnitId equals ou.Id
+                        join ou in await _organizationUnitRepository.GetAllReadonlyAsync() on uou.OrganizationUnitId equals ou.Id
                         where ou.Code.StartsWith(organizationUnit.Code)
                         select user;
 
@@ -944,7 +944,7 @@ namespace Abp.Authorization.Users
             {
                 if (!includeChildren)
                 {
-                    var query = from uou in _userOrganizationUnitRepository.GetAll()
+                    var query = from uou in _userOrganizationUnitRepository.GetAllReadonly()
                         join user in Users on uou.UserId equals user.Id
                         where uou.OrganizationUnitId == organizationUnit.Id
                         select user;
@@ -953,9 +953,9 @@ namespace Abp.Authorization.Users
                 }
                 else
                 {
-                    var query = from uou in _userOrganizationUnitRepository.GetAll()
+                    var query = from uou in _userOrganizationUnitRepository.GetAllReadonly()
                         join user in Users on uou.UserId equals user.Id
-                        join ou in _organizationUnitRepository.GetAll() on uou.OrganizationUnitId equals ou.Id
+                        join ou in _organizationUnitRepository.GetAllReadonly() on uou.OrganizationUnitId equals ou.Id
                         where ou.Code.StartsWith(organizationUnit.Code)
                         select user;
 

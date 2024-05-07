@@ -173,7 +173,7 @@ namespace Abp.Webhooks
         {
             return await _unitOfWorkManager.WithUnitOfWorkAsync(async () =>
             {
-                return await AsyncQueryableExecuter.AnyAsync((await _webhookSubscriptionRepository.GetAllAsync())
+                return await AsyncQueryableExecuter.AnyAsync((await _webhookSubscriptionRepository.GetAllReadonlyAsync())
                     .Where(subscriptionInfo =>
                         subscriptionInfo.TenantId == tenantId &&
                         subscriptionInfo.IsActive &&
@@ -186,7 +186,7 @@ namespace Abp.Webhooks
         {
             return _unitOfWorkManager.WithUnitOfWork(() =>
             {
-                return _webhookSubscriptionRepository.GetAll()
+                return _webhookSubscriptionRepository.GetAllReadonly()
                     .Any(subscriptionInfo =>
                         subscriptionInfo.TenantId == tenantId &&
                         subscriptionInfo.IsActive &&

@@ -660,8 +660,8 @@ namespace Abp.Notifications
             {
                 using (_unitOfWorkManager.Current.SetTenantId(user.TenantId))
                 {
-                    var query = from userNotificationInfo in _userNotificationRepository.GetAll()
-                        join tenantNotificationInfo in _tenantNotificationRepository.GetAll() on userNotificationInfo
+                    var query = from userNotificationInfo in _userNotificationRepository.GetAllReadonly()
+                        join tenantNotificationInfo in _tenantNotificationRepository.GetAllReadonly() on userNotificationInfo
                             .TenantNotificationId equals tenantNotificationInfo.Id
                         where userNotificationInfo.UserId == user.UserId
                         orderby tenantNotificationInfo.CreationTime descending
@@ -773,8 +773,8 @@ namespace Abp.Notifications
             {
                 using (_unitOfWorkManager.Current.SetTenantId(tenantId))
                 {
-                    var query = from userNotificationInfo in _userNotificationRepository.GetAll()
-                        join tenantNotificationInfo in _tenantNotificationRepository.GetAll() on userNotificationInfo
+                    var query = from userNotificationInfo in _userNotificationRepository.GetAllReadonly()
+                        join tenantNotificationInfo in _tenantNotificationRepository.GetAllReadonly() on userNotificationInfo
                             .TenantNotificationId equals tenantNotificationInfo.Id
                         where userNotificationInfo.Id == userNotificationId
                         select new
@@ -870,7 +870,7 @@ namespace Abp.Notifications
 
                     result.AddRange(unPublishedNotifications);
 
-                    var queryForPublishedNotifications = _tenantNotificationRepository.GetAll()
+                    var queryForPublishedNotifications = _tenantNotificationRepository.GetAllReadonly()
                         .Where(n => n.CreatorUserId == user.UserId && n.NotificationName == notificationName);
 
                     if (startDate.HasValue)
